@@ -8,25 +8,22 @@
   "build": {
     "dockerfile": "Dockerfile"
   },
-
   "features": {
     "ghcr.io/devcontainers/features/terraform:1": {
       "version": "latest",
       "tflint": "latest"
     },
     "ghcr.io/devcontainers/features/azure-cli:1": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
     "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
       "minikube": "none"
     }
   },
-
   // 2-core is enough for every lab until Kubernetes (week 10).
   "hostRequirements": {
     "cpus": 2
   },
-
   "postCreateCommand": "bash scripts/post-create.sh",
-
   "customizations": {
     "vscode": {
       "extensions": [
