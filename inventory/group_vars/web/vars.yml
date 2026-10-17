@@ -1,0 +1,19 @@
+---
+# Lab 2, Part B: variables for every host in the group "web".
+#
+# Ansible loads this file automatically because it sits in
+# inventory/group_vars/<group name>/. Define these variables:
+#
+#   http_port         the number 80
+#   site_title        the string "SESAME Shop"
+#   site_color        a default colour for the page, e.g. "#023E9A"
+#   shop_features     a list of at least three strings,
+#                     e.g. Catalog, Cart, Checkout
+#   app_users         a list of at least two users; each item is a map with
+#                     "name" and "shell", e.g. deploy with /bin/bash and
+#                     monitor with /usr/sbin/nologin
+#   maintenance_mode  the boolean false
+#
+# Part E adds one more line here:  db_password: "{{ vault_db_password }}"
+#
+# Write your variables below this line.

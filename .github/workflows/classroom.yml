@@ -1,0 +1,93 @@
+name: Autograding
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Ansible and test tools
+        run: pip install ansible-core pyyaml
+
+      - name: Start two test servers (containers)
+        run: bash tests/ci-targets.sh
+
+      - name: Variables
+        id: vars
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: "Part B: variables in group_vars and host_vars"
+          command: python tests/check_vars.py
+          timeout: 5
+          max-score: 1
+
+      - name: Playbook converges
+        id: converge
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: "Parts C-D: playbook runs and the hosts are right"
+          command: bash tests/check_playbook.sh converge
+          timeout: 10
+          max-score: 3
+
+      - name: Playbook is idempotent
+        id: idempotent
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: "Second run reports changed=0"
+          command: bash tests/check_playbook.sh idempotent
+          timeout: 10
+          max-score: 2
+
+      - name: Handlers and conditions
+        id: handlers
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: "Handler fixes drift; maintenance_mode works both ways"
+          command: bash tests/check_playbook.sh handlers
+          timeout: 10
+          max-score: 1
+
+      - name: Vault
+        id: vault
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: "Part E: secret encrypted and delivered with mode 0600"
+          command: bash tests/check_playbook.sh vault
+          timeout: 5
+          max-score: 1
+
+      - name: Submission answered
+        id: submission
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: "SUBMISSION.md complete"
+          command: bash scripts/check-submission.sh
+          timeout: 5
+          max-score: 2
+
+      - name: Autograding Reporter
+        uses: classroom-resources/autograding-grading-reporter@v1
+        env:
+          VARS_RESULTS: "${{ steps.vars.outputs.result }}"
+          CONVERGE_RESULTS: "${{ steps.converge.outputs.result }}"
+          IDEMPOTENT_RESULTS: "${{ steps.idempotent.outputs.result }}"
+          HANDLERS_RESULTS: "${{ steps.handlers.outputs.result }}"
+          VAULT_RESULTS: "${{ steps.vault.outputs.result }}"
+          SUBMISSION_RESULTS: "${{ steps.submission.outputs.result }}"
+        with:
+          runners: vars,converge,idempotent,handlers,vault,submission

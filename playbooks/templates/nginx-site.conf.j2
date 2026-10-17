@@ -1,0 +1,14 @@
+{# Lab 2, Part C: nginx configuration for the default site.
+   TODO: replace the hard-coded port 80 with the variable http_port. #}
+# {{ ansible_managed }}
+server {
+    listen 80 default_server;
+    server_name _;
+    root /var/www/html;
+    index index.html;
+    server_tokens off;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}

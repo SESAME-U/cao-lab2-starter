@@ -1,0 +1,40 @@
+---
+# Lab 2: from a static page to a templated, configurable web server.
+#
+# This is the Lab 1 playbook. Keep it working while you change it, step by step.
+# Each part of the handout says which task to add or replace:
+#
+#   Part C  replace the copy task with ansible.builtin.template (index.html.j2)
+#           add a template task for /etc/nginx/sites-available/default
+#           (nginx-site.conf.j2) that notifies a handler "Reload nginx"
+#   Part D  add a task that creates every user in app_users (loop)
+#           add the install condition on the OS family (when)
+#           add the maintenance page tasks (when + maintenance_mode | bool)
+#   Part E  add the tasks that write /etc/shop/app.env from the vault secret
+#
+# Run it:        make run
+# Run it again:  the PLAY RECAP must show changed=0 on both servers.
+
+- name: Web servers serve the shop page
+  hosts: web
+  become: true
+
+  tasks:
+    - name: Install nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Write the home page
+      ansible.builtin.copy:
+        dest: /var/www/html/index.html
+        content: "<h1>Hello from {{ inventory_hostname }}</h1>\n"
+        mode: "0644"
+
+    - name: Start and enable nginx
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true

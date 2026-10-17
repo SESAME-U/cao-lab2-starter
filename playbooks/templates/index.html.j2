@@ -1,0 +1,25 @@
+{# Lab 2, Part C: the home page, rendered once per host.
+   Double curly braces print a variable; this block is a Jinja2 comment
+   and does not appear in the page.
+   TODO: complete the five places marked TODO. #}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  {# TODO 1: the title must be the variable site_title #}
+  <title>SESAME Shop</title>
+</head>
+{# TODO 2: the background colour must be the variable site_color #}
+<body style="font-family: sans-serif; background: #023E9A; color: white; padding: 2em">
+  <h1>Hello from {{ inventory_hostname }}</h1>
+  {# TODO 3: print the distribution and its version from the facts,
+     e.g. "Running Ubuntu 24.04" (facts: distribution, distribution_version) #}
+  <p>Running ...</p>
+  <h2>Features</h2>
+  <ul>
+  {# TODO 4: one <li> per item of the list shop_features, with a for loop #}
+  </ul>
+  {# TODO 5: print the port from the variable http_port #}
+  <p>Served by nginx on port 80</p>
+</body>
+</html>
