@@ -2,11 +2,10 @@
   // Cloud Automation and Orchestration - SESAME University
   // Shared toolbox used for the whole semester.
   //
-  // Built on the default Codespaces "universal" image on purpose:
-  // codespaces based on the default image do not count the container
-  // against your monthly storage quota, even with extra features added.
+  // Use a focused Python image to keep the container build within the
+  // available disk space; the course tools are installed as features below.
   "name": "CAO toolbox",
-  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "image": "mcr.microsoft.com/devcontainers/python:1-3.12-bookworm",
 
   "features": {
     "ghcr.io/devcontainers/features/terraform:1": {
