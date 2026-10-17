@@ -5,7 +5,9 @@
   // Use a focused Python image to keep the container build within the
   // available disk space; the course tools are installed as features below.
   "name": "CAO toolbox",
-  "image": "mcr.microsoft.com/devcontainers/python:1-3.12-bookworm",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
 
   "features": {
     "ghcr.io/devcontainers/features/terraform:1": {
